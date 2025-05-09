@@ -11,17 +11,21 @@ import AuthLayout from '@/layouts/auth-layout';
 
 type RegisterForm = {
     name: string;
+    username: string;
     email: string;
     password: string;
     password_confirmation: string;
+    role: string;
 };
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
         name: '',
+        username: '',
         email: '',
         password: '',
         password_confirmation: '',
+        role: 'user',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -54,6 +58,22 @@ export default function Register() {
                     </div>
 
                     <div className="grid gap-2">
+                        <Label htmlFor="username">Username</Label>
+                        <Input
+                            id="username"
+                            type="text"
+                            required
+                            tabIndex={2}
+                            autoComplete="username"
+                            value={data.username}
+                            onChange={(e) => setData('username', e.target.value)}
+                            disabled={processing}
+                            placeholder="Username"
+                        />
+                        <InputError message={errors.username} className="mt-2" />
+                    </div>
+
+                    <div className="grid gap-2">
                         <Label htmlFor="email">Email address</Label>
                         <Input
                             id="email"
@@ -67,6 +87,27 @@ export default function Register() {
                             placeholder="email@example.com"
                         />
                         <InputError message={errors.email} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="role">Role</Label>
+                        <select
+                            id="role"
+                            required
+                            tabIndex={3}
+                            value={data.role}
+                            onChange={(e) => setData('role', e.target.value)}
+                            disabled={processing}
+                            className="border rounded px-3 py-2"
+                        >
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                            <option value="bendahara">Bendahara</option>
+                            <option value="verifikator">Verifikator</option>
+                            <option value="auditor">Auditor</option>
+                            <option value="kepala_unit">Kepala Unit</option>
+                        </select>
+                        <InputError message={errors.role} />
                     </div>
 
                     <div className="grid gap-2">

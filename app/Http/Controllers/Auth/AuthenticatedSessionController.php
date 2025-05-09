@@ -31,6 +31,11 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        if ($request->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$request->user()->hasVerifiedEmail()) {
+            Auth::logout();
+            return back()->withErrors(['email' => 'You must verify your email address before logging in.']);
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
